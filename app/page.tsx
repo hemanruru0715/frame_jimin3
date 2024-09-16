@@ -16,7 +16,7 @@ const frameMetadata = getFrameMetadata({
   ],
   image: {
     //src: `${NEXT_PUBLIC_URL}/mainImage.png`,
-    src: `${NEXT_PUBLIC_URL}/api/mainog`,
+    src: `${NEXT_PUBLIC_URL}/api/mainog?cache_burst=${Math.floor(Date.now() / 1000)}`,
     aspectRatio: '1:1',
   },
   postUrl: `${NEXT_PUBLIC_URL}/api/frame?cache_burst=${Math.floor(Date.now() / 1000)}`,
