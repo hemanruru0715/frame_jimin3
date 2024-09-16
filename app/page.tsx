@@ -24,7 +24,7 @@ const frameMetadata = getFrameMetadata({
 
 
 export const metadata: Metadata = {
-  title: 'hemanruru.vercel.app',
+  title: 'frame-jimin3.vercel.app',
   description: 'LFG',
   metadataBase: new URL('https://frame-jimin3.vercel.app'),  // 기본 URL 설정
   openGraph: {
