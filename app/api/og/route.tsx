@@ -1,154 +1,3 @@
-// import { ImageResponse } from "@vercel/og";
-// //import { NEXT_PUBLIC_URL } from "../../config";
-// import { NEXT_PUBLIC_URL } from '@/app/config';
-
-// //export const runtime = "edge";
-// export const dynamic = "force-dynamic";
-
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
-// //const GRAPHQL_ENDPOINT = `https://gateway-arbitrum.network.thegraph.com/api/${process.env.THE_GRAPH_API_KEY}/subgraphs/id/2hTKKMwLsdfJm9N7gUeajkgg8sdJwky56Zpkvg8ZcyP8`;
-
-// // const noCacheFetch = async (url: string, options: RequestInit) =>
-// //   fetch(url, options);
-
-// export async function GET(req: Request) {
-// //   const document = gql`
-// //     {
-// //       sales(orderBy: timestamp, orderDirection: desc, first: 1) {
-// //         amount
-// //         timestamp
-// //         nft {
-// //           tokenId
-// //           ... on Punk {
-// //             id
-// //             metadata {
-// //               contractURI
-// //               id
-// //               tokenId
-// //               tokenURI
-// //               svg
-// //               traits {
-// //                 id
-// //                 type
-// //               }
-// //             }
-// //           }
-// //         }
-// //       }
-// //     }
-// //   `;
-
-// //   const graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT, {
-// //     fetch,
-// //     cache: "no-store",
-// //   });
-
-
-// //   const response: any = await graphQLClient.request(document);
-
-// //   console.warn("!!!!!!!!!!!!!!!!document=" + JSON.stringify(document));
-
-//   const { searchParams } = new URL(req.url);
-  
-//   const fid = searchParams.get('fid');
-//   const followerCount = searchParams.get('followerCount');
-//   const followingCount = searchParams.get('followingCount');
-//   const profileImage = searchParams.get('profileImage') || `${NEXT_PUBLIC_URL}/default-image.png`;
-
-//   if (true) {
-//     return new ImageResponse(
-//         (
-//             <div
-//               style={{
-//                 fontSize: 60,
-//                 color: "white",
-//                 background: "#638596",
-//                 width: "100%",
-//                 height: "100%",
-//                 // padding: "0px 200px",
-//                 textAlign: "center",
-//                 display: "flex",
-//                 justifyContent: "center",
-//                 alignItems: "center",
-//                 position: "relative",
-//               }}
-//             >
-//               <img
-//                 src={`${NEXT_PUBLIC_URL}/park-3.png`}
-//                 //src={profileImage}
-//                 height="400"
-//                 width="400"
-//                 style={{
-//                   position: "absolute",
-//                   top: 0,
-//                   left: 0,
-//                   width: "100%",
-//                   height: "100%",
-//                   objectFit: "cover",
-//                 }}
-//               />
-//               <div
-//                 style={{
-//                   position: "absolute",
-//                   top: 0,
-//                   left: 0,
-//                   width: "100%",
-//                   height: "100%",
-//                   display: "flex",
-//                   flexDirection: "column",
-//                   justifyContent: "center",
-//                   alignItems: "center",
-//                   textAlign: "center",
-//                   zIndex: 1,
-//                 }}
-//               >
-//                 <div style={{ marginBottom: "10px", display: "flex" }}>
-//                   fid: {fid}
-//                 </div>
-//                 <div style={{ marginBottom: "10px", display: "flex" }}>
-//                 followerCount: {followerCount} / followingCount: {followingCount}
-//                 </div>
-//                 <div style={{ marginTop: "100px", display: "flex", fontSize: "50px" }}>
-//                   Last Update: {new Date().toISOString()}
-//                 </div>
-//               </div>
-//             </div>
-//           ),
-//       {
-//         width: 1200,
-//         height: 630,
-//       }
-//     );
-//   } else {
-//     return new ImageResponse(
-//       (
-//         <div
-//           style={{
-//             fontSize: 40,
-//             color: "black",
-//             background: "white",
-//             width: "100%",
-//             height: "100%",
-//             padding: "50px 200px",
-//             textAlign: "center",
-//             justifyContent: "center",
-//             alignItems: "center",
-//             display: "flex",
-//           }}
-//         >
-//           Error fetching data :(. Please try again later.
-//         </div>
-//       ),
-//       {
-//         width: 1200,
-//         height: 630,
-//       }
-//     );
-//   }
-// }
-
-
 import { ImageResponse } from "@vercel/og";
 import { NEXT_PUBLIC_URL } from '@/app/config';
 import fs from 'fs';
@@ -161,7 +10,7 @@ export const dynamic = "force-dynamic";
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // font 파일 경로
-const fontPath = path.join(process.cwd(), 'public/fonts/Poppins-Regular.ttf');
+const fontPath = path.join(process.cwd(), 'public/fonts/Recipekorea.ttf');
 const fontData = fs.readFileSync(fontPath);
 
 
@@ -189,12 +38,6 @@ export async function GET(req: Request) {
 
   console.warn("profileName=" + profileName);
   console.warn("fid=" + fid);
-  // console.warn("farScore=" + farScore);
-  // console.warn("farBoost=" + farBoost);
-  // console.warn("farRank=" + farRank);
-  // console.warn("finalTodayAmount=" + finalTodayAmount);
-  // console.warn("finalWeeklyAmount=" + finalWeeklyAmount);
-  // console.warn("finalLifeTimeAmount=" + finalLifeTimeAmount);
 
 
   let like  = 0;
@@ -262,11 +105,6 @@ export async function GET(req: Request) {
     finalReplyUsd = replyUsd.toLocaleString();
     finalRcQtUsd  = rcQtUsd.toLocaleString();
 
-    // console.log("likeUsd=" + likeUsd);
-    // console.log("finalLikeUsd=" + finalLikeUsd);
-    // console.log("replyUsd=" + replyUsd);
-    // console.log("finalReplyUsd=" + finalReplyUsd);
-    // console.warn("finalRcQtUsd=" + finalRcQtUsd);
 
     likeKrw  = parseFloat((like * parseFloat(moxieKrwPrice)).toFixed(2));
     replyKrw = parseFloat((reply * parseFloat(moxieKrwPrice)).toFixed(2));
@@ -274,10 +112,6 @@ export async function GET(req: Request) {
     finalLikeKrw = likeKrw.toLocaleString();
     finalReplyKrw = replyKrw.toLocaleString();
     finalRcQtKrw = rcQtKrw.toLocaleString();
-
-    // console.warn("finalLikeKrw=" + finalLikeKrw);
-    // console.warn("finalReplyKrw=" + finalReplyKrw);
-    // console.warn("finalRcQtKrw=" + finalRcQtKrw);
 
     todayAmountUsd    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
     weeklyAmountUsd   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
@@ -300,322 +134,211 @@ export async function GET(req: Request) {
   if (searchParams != null) {
     return new ImageResponse(
       (
-        <div
+      <div
         style={{
           display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
           height: '100%',
           width: '100%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'column',
-          backgroundImage: 'linear-gradient(to bottom, #dbf4ff, #fff1f1)',
-          fontSize: 45,
-          letterSpacing: -2,
-          fontWeight: 700,
-          textAlign: 'center',
-          position: 'relative',
-          border: '10px solid purple',
+          //fontFamily: '"Arial", sans-serif',
           fontFamily: '"Poppins-Regular"', // 폰트 이름
+          //backgroundColor: '#7158e2',
+          color: '#B203B2',
+          padding: '40px',
+          boxSizing: 'border-box',
+          //backgroundImage: 'linear-gradient(145deg, #6d5dfc 10%, #b2a3f6 90%)',
+          backgroundImage: `url(${NEXT_PUBLIC_URL}/bg_moxie.png)`,
         }}
       >
-          {/* 상단 정보 섹션 */}
-          <div
+
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '80px', marginBottom: '50px' }}>
+          <div style={{ display: 'flex', textAlign: 'left' }}>
+          <img
+            src={profileImage}
+            height="150"
+            width="150"
             style={{
-              position: 'absolute',
-              top: '20px',
-              left: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              zIndex: 2,
+              borderRadius: '0%',
+              objectFit: 'cover',
+              marginRight: '20px',
             }}
-          >
+          />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '30px', color: 'black', marginTop: '20px' }}>
+            <div style={{ display: 'flex', marginRight: '20px' }}>@{profileName}</div>
+            <div style={{ display: 'flex', marginRight: '40px' }}>FID:{fid}</div>
+          </div>
+
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right', fontSize: '80px' }}>
+            <strong></strong>
+            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right', fontSize: '40px' }}>
+              <strong style={{ marginLeft: '150px', fontSize: '30px'}}>Moxie Price</strong>
+              <strong style={{ marginLeft: '150px'}}>0.0209 USD</strong>
+              <strong style={{ marginLeft: '150px'}}>2.78 KRW</strong>
+            </div>
+          </div>
+        </div>
+
+
+        {/* 행 단위로 구성된 섹션들 */}
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '40px' }}>
+          <div style={{ display: 'flex', textAlign: 'left' }}>
+            <strong>FarRank</strong>
+          </div>
+          <div style={{ display: 'flex', textAlign: 'right' }}>
+            <strong>FarScore</strong>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '70px' }}>
+          <div style={{ display: 'flex', textAlign: 'left' }}>
+            <strong>805</strong>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right', fontSize: '70px' }}>
+            <strong>3.47</strong>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '70px', marginBottom: '10px' }}>
+          <div style={{ display: 'flex', textAlign: 'left' }}>
+            <strong></strong>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right', fontSize: '70px' }}>
+            <strong></strong>
+            <div style={{ display: 'flex', flexDirection: 'row', textAlign: 'right', fontSize: '30px' }}>
+              <strong>(3.40 FT / 0 LP)</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '50px', marginBottom: '50px' }}>
+          <div style={{ display: 'flex', textAlign: 'left' }}>
+            <strong></strong>
+          </div>
+          <div style={{ display: 'flex', textAlign: 'right' }}>
+            <strong></strong>
+          </div>
+        </div>
+        
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '30px', marginBottom: '10px' }}>
+          <div style={{ display: 'flex', textAlign: 'left' }}>
+            <strong></strong>
+          </div>
+          <div style={{ display: 'flex', textAlign: 'right' }}>
+            <strong>USD / KRW</strong>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '45px', marginBottom: '25px' }}>
+          <div style={{ display: 'flex', textAlign: 'left', fontSize: '40px' }}>
+            <strong>ClaimAmount 4736.75</strong>
+          </div>
+          <div style={{ display: 'flex', textAlign: 'right' }}>
+            <strong>15.26 / 20,302</strong>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '45px', marginBottom: '25px' }}>
+          <div style={{ display: 'flex', textAlign: 'left' }}>
+            <strong>TVL 340.5K</strong>
+          </div>
+          <div style={{ display: 'flex', textAlign: 'right', fontSize: '40px' }}>
+            <strong>710.12 / 945,200</strong>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '45px', marginBottom: '25px' }}>
+          <div style={{ display: 'flex', textAlign: 'left' }}>
+            <strong>Today 6,781.25</strong>
+          </div>
+          <div style={{ display: 'flex', textAlign: 'right' }}>
+            <strong>15.26 / 20,302</strong>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '50px' }}>
+          <div style={{ display: 'flex', flexDirection: 'row',textAlign: 'left', marginLeft: '5px' }}>
             <img
-              src={profileImage}
-              height="150"
-              width="150"
+              src={`${NEXT_PUBLIC_URL}/like.png`}
+              height="100"
+              width="100"
               style={{
-                borderRadius: '50%',
+                borderRadius: '0%',
                 objectFit: 'cover',
                 marginRight: '20px',
               }}
             />
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '30px', color: 'black' }}>
-              <div style={{ display: 'flex', marginRight: '20px' }}>@{profileName}</div>
-              <div style={{ display: 'flex', marginRight: '40px' }}>FID:{fid}</div>
-            </div>
+            <strong style={{marginTop: '15px' }}>3.47</strong>
+            <strong style={{marginTop: '15px', marginLeft: '20px' }}>[ ∞ ]</strong>
           </div>
+          <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px' }}>
+            <strong>0.0073 / 9</strong>
+          </div>
+        </div>
 
-          <div style={{ position: 'absolute', top: '5px', right: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '50px' }}>
+          <div style={{ display: 'flex', flexDirection: 'row',textAlign: 'left' }}>
             <img
-              src={`${NEXT_PUBLIC_URL}/moxieImage.png`} // SVG 파일 경로 확인
-              height="150"
-              width="200"  // 크기 조정
+              src={`${NEXT_PUBLIC_URL}/word_bubble.png`}
+              height="110"
+              width="110"
               style={{
-                objectFit: 'contain',
+                borderRadius: '0%',
+                objectFit: 'cover',
+                marginRight: '20px',
               }}
             />
+            <strong style={{marginTop: '20px' }}>10.42</strong>
+            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[132/150]</strong>
           </div>
-
-          {/* 메인 텍스트 섹션 */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              //backgroundImage: 'linear-gradient(90deg, rgb(0, 124, 240), rgb(0, 223, 216))',
-              backgroundClip: 'text',
-              color: 'transparent',
-              marginTop: '100px', // Adjust as needed
-              width: '100%', // Ensure it takes full width for proper layout
-            }}
-          >
-  
-           {/* Moxie Price */}
-           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <span>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
-                    <span>
-                      Moxie Price
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', color: 'black' }}>
-                    <span>
-                      {moxieUsdPrice} USD / {moxieKrwPrice} KRW
-                    </span>
-                  </div>
-                </div>
-              </span>
-           </div>
-
-
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'black' }}>
-              <span>
-              
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '120px', marginBottom: '10px' }}>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      FarScore
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      {finalFarScore}
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '20px', marginBottom: '' }}>
-                    <span>
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '90px' }}>
-                    <span>
-                     Like 👍
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      {finalLike}
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({likeUsd} USD)
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({finalLikeKrw} KRW)
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '20px', marginBottom: '' }}>
-                    <span>
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '87px' }}>
-                    <span>
-                      Today
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      {finalTodayAmount}
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({finalTodayAmountUsd} USD)
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({finalTodayAmountKrw} KRW)
-                    </span>
-                  </div>
-                </div>
-
-
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '120px', marginBottom: '10px' }}>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      FarBoost
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                    {finalFarBoost}
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
-                    <span>
-                      Engagement Value
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                     Reply 💬
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      {finalReply} 
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({finalReplyUsd} USD)
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({finalReplyKrw} KRW)
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '30px', marginBottom: '15px' }}>
-                    <span>
-                      Moxie Earnings
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      Weekly
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      {finalWeeklyAmount}
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({finalWeeklyAmountUsd} USD)
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({finalWeeklyAmountKrw} KRW)
-                    </span>
-                  </div>
-                </div>
-
-
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      FarRank
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                    {finalFarRank}
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '20px', marginBottom: '' }}>
-                    <span>
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '90px' }}>
-                    <span>
-                      Rc/Qt 🔄
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      {finalRcQt}
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                    ({finalRcQtUsd} USD)
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                    ({finalRcQtKrw} KRW)
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '20px', marginBottom: '' }}>
-                    <span>
-                    </span>
-                  </div>
-
-                  <div style={{ display: 'flex',textAlign: 'center', marginTop: '87px' }}>
-                    <span>
-                      Lifetime
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center' }}>
-                    <span>
-                      {finalLifeTimeAmount}
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({finalLifeTimeAmountUsd} USD)
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex',textAlign: 'center', fontSize: '30px' }}>
-                    <span>
-                      ({finalLifeTimeAmountKrw} KRW)
-                    </span>
-                  </div>                                    
-                </div>
-
-              </span>
-            </div>
+          <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px' }}>
+            <strong>0.022 / 28</strong>
           </div>
+        </div>
 
-          {/* Footer section with time on the left and author on the right */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '20px',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              padding: '0 20px', // Padding for left and right alignment
-              fontSize: '24px', // Adjust font size as needed
-              color: 'black',
-              fontFamily: '"Poppins-Regular"', // 폰트 이름
-            }}
-          >
-            {/* 시간 (ISO 8601 포맷) */}
-            <span>{new Date().toISOString()}</span>
-
-            {/* 작성자 */}
-            <span>by @hemanruru</span>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '50px' }}>
+          <div style={{ display: 'flex', flexDirection: 'row',textAlign: 'left' }}>
+            <img
+              src={`${NEXT_PUBLIC_URL}/recast.png`}
+              height="110"
+              width="110"
+              style={{
+                borderRadius: '0%',
+                objectFit: 'cover',
+                marginRight: '20px',
+              }}
+            />
+            <strong style={{marginTop: '20px' }}>20.85</strong>
+            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[95/150]</strong>
           </div>
+          <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px' }}>
+            <strong>0.044 / 57</strong>
+          </div>
+        </div>
+
+
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '20px',
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '0 20px', // Padding for left and right alignment
+            fontSize: '24px', // Adjust font size as needed
+            color: 'black',
+            fontFamily: '"Poppins-Regular"', // 폰트 이름
+          }}
+        >
+          {/* 시간 (ISO 8601 포맷) */}
+          <span>{new Date().toISOString()}</span>
+
+          {/* 작성자 */}
+          <span>by @hemanruru</span>
+        </div>
 
         </div>
       ),
