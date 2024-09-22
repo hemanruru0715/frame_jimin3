@@ -11,7 +11,7 @@ const frameMetadata = getFrameMetadata({
     {
       action: 'link', 
       label: '🔄Share', 
-      target: 'https://warpcast.com/~/compose?text=Check your Moxie stats. Frame by @hemanruru&embeds[]=https://frame-jimin3.vercel.app/' 
+      target: 'https://warpcast.com/~/compose?text=Check your Moxie stats. Frame by @hemanruru&embeds[]=https://hemanruru-moxiestat.vercel.app.vercel.app/' 
     },
   ],
   image: {
@@ -24,11 +24,11 @@ const frameMetadata = getFrameMetadata({
 
 
 export const metadata: Metadata = {
-  title: 'frame-jimin3.vercel.app',
+  title: 'hemanruru-moxiestat.vercel.app.vercel.app',
   description: 'LFG',
-  metadataBase: new URL('https://frame-jimin3.vercel.app'),  // 기본 URL 설정
+  metadataBase: new URL('https://hemanruru-moxiestat.vercel.app.vercel.app'),  // 기본 URL 설정
   openGraph: {
-    title: 'frame-jimin3.vercel.app',
+    title: 'hemanruru-moxiestat.vercel.app.vercel.app',
     description: 'Check the MOXIE stats',
      images: [`${NEXT_PUBLIC_URL}/thanksgiving_day.png`],
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <h1>frame-jimin3.vercel.app</h1>
+      <h1>hemanruru-moxiestat.vercel.app.vercel.app</h1>
     </>
   );
 }
