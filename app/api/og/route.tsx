@@ -145,11 +145,11 @@ export async function GET(req: Request) {
           //fontFamily: '"Arial", sans-serif',
           fontFamily: '"Poppins-Regular"', // 폰트 이름
           //backgroundColor: '#7158e2',
-          color: '#B203B2',
+          color: '#FFFFFF',
           padding: '40px',
           boxSizing: 'border-box',
           //backgroundImage: 'linear-gradient(145deg, #6d5dfc 10%, #b2a3f6 90%)',
-          backgroundImage: `url(${NEXT_PUBLIC_URL}/bg_moxie.png)`,
+          backgroundImage: `url(${NEXT_PUBLIC_URL}/autumn.png)`,
         }}
       >
 
@@ -260,7 +260,7 @@ export async function GET(req: Request) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '50px' }}>
-          <div style={{ display: 'flex', flexDirection: 'row',textAlign: 'left', marginLeft: '5px' }}>
+          <div style={{ display: 'flex', flexDirection: 'row',textAlign: 'left', marginBottom:'8px' }}>
             <img
               src={`${NEXT_PUBLIC_URL}/like.png`}
               height="100"
@@ -280,11 +280,11 @@ export async function GET(req: Request) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '50px' }}>
-          <div style={{ display: 'flex', flexDirection: 'row',textAlign: 'left' }}>
+          <div style={{ display: 'flex', flexDirection: 'row',textAlign: 'left', marginBottom:'8px' }}>
             <img
               src={`${NEXT_PUBLIC_URL}/word_bubble.png`}
-              height="110"
-              width="110"
+              height="100"
+              width="100"
               style={{
                 borderRadius: '0%',
                 objectFit: 'cover',
@@ -292,9 +292,9 @@ export async function GET(req: Request) {
               }}
             />
             <strong style={{marginTop: '20px' }}>10.42</strong>
-            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[132/150]</strong>
+            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[132/300]</strong>
           </div>
-          <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px' }}>
+          <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px', marginTop:'10px' }}>
             <strong>0.022 / 28</strong>
           </div>
         </div>
@@ -303,7 +303,7 @@ export async function GET(req: Request) {
           <div style={{ display: 'flex', flexDirection: 'row',textAlign: 'left' }}>
             <img
               src={`${NEXT_PUBLIC_URL}/recast.png`}
-              height="110"
+              height="115"
               width="110"
               style={{
                 borderRadius: '0%',
@@ -314,7 +314,7 @@ export async function GET(req: Request) {
             <strong style={{marginTop: '20px' }}>20.85</strong>
             <strong style={{marginTop: '20px', marginLeft: '20px' }}>[95/150]</strong>
           </div>
-          <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px' }}>
+          <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px', marginTop:'10px' }}>
             <strong>0.044 / 57</strong>
           </div>
         </div>
