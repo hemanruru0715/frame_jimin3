@@ -133,14 +133,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         const [socialCapitalQueryData, castsResponse, reactionsResponse, quoteRecastsQueryData] = await Promise.all([
           fetchQuery(socialCapitalQuery),
 
-          axios.get(`${server}/v1/castsByFid?fid=`+ myFid +`&pageSize=350&reverse=true`, {
+          axios.get(`${server}/v1/castsByFid?fid=`+ myFid +`&pageSize=400&reverse=true`, {
             headers: {
               "Content-Type": "application/json",
               "x-airstack-hubs": apiKey as string,
             },
           }),
 
-          axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_RECAST&pageSize=170&reverse=true`, {
+          axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_RECAST&pageSize=200&reverse=true`, {
             headers: {
               "Content-Type": "application/json",
               "x-airstack-hubs": apiKey as string,
