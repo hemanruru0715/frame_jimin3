@@ -5,7 +5,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
 //개발db, 운영db 분리하기
-const supabaseDb = process.env.NODE_ENV == 'development' ? 'user_stats_dev' : 'user_stats';
+const supabaseDb = process.env.NODE_ENV == 'development' ? 'user_stats_3_dev' : 'user_stats_3';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 

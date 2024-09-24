@@ -1,4 +1,3 @@
-
 import { getFrameHtmlResponse } from '@coinbase/onchainkit/frame';
 import { NextRequest, NextResponse } from 'next/server';
 import { init, validateFramesMessage } from '@airstack/frames';
@@ -110,10 +109,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     let farScore = 0;
     let farBoost = 0;
     let farRank = 0;
-    let tvl = "N/A";
+    let tvl = 'N/A';
     let tvlBoost = 0;
     let liquidityBoost = 0;
-    
     let availableClaimAmount = 0;
 
     let todayAmount = 0;
@@ -161,7 +159,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         farScore = data.Socials.Social[0].farcasterScore.farScore.toFixed(3);
         farBoost = data.Socials.Social[0].farcasterScore.farBoost.toFixed(3);
         farRank = data.Socials.Social[0].farcasterScore.farRank.toFixed(0);
-        tvl = (Number(data.Socials.Social[0].farcasterScore.tvl) / 1e21).toFixed(1);
+        tvl = (Number(data.Socials.Social[0].farcasterScore.tvl) / 1e18).toFixed(1); //실제 저장된 tvl목시개수는 10^18로 나눈다. 그다음 api/og로 전달. 넘겨서 다시 K표시위해 3으로 추가 나누기
         tvlBoost = data.Socials.Social[0].farcasterScore.tvlBoost.toFixed(2);
         liquidityBoost = data.Socials.Social[0].farcasterScore.liquidityBoost.toFixed(2);
         availableClaimAmount = data.FarcasterMoxieClaimDetails.FarcasterMoxieClaimDetails[0].availableClaimAmount.toFixed(2);
@@ -170,8 +168,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         weeklyAmount = data.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
         lifeTimeAmount = data.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
 
-        console.warn("1111tvl=" + tvl);
-        console.warn("222tvl=" + (Number(tvl) / 1e21).toFixed(1));
+        console.warn("tvl=" + (Number(tvl) / 1e18).toFixed(1));
         console.warn("tvlBoost=" + tvlBoost);
         console.warn("liquidityBoost=" + liquidityBoost);
         console.warn("availableClaimAmount=" + availableClaimAmount);
@@ -245,6 +242,10 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       reply_count: replyCount,
       recast_count: recastCount,
       quote_count: quoteCount,
+      tvl: tvl,
+      tvl_boost: tvlBoost,
+      liquidity_boost: liquidityBoost,
+      available_claim_amount: availableClaimAmount,
     });
     /**************** DB 작업 끝 ****************/
 
@@ -267,6 +268,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
                                          &farScore=${farScore}&farBoost=${farBoost}&farRank=${farRank}
                                          &todayAmount=${todayAmount}&weeklyAmount=${weeklyAmount}&lifeTimeAmount=${lifeTimeAmount}
                                          &replyCount=${replyCount}&recastCount=${recastCount}&quoteCount=${quoteCount}
+                                         &tvl=${tvl}&tvlBoost=${tvlBoost}&liquidityBoost=${liquidityBoost}&availableClaimAmount=${availableClaimAmount}
                                          &cache_burst=${Math.floor(Date.now() / 1000)}`,
           aspectRatio: '1:1',
         },
@@ -307,6 +309,10 @@ export async function GET(req: NextRequest) {
     reply_count: number;
     recast_count: number;
     quote_count: number;
+    tvl: number,
+    tvl_boost: number,
+    liquidity_boost: number,
+    available_claim_amount: number,
   }
 
   /**************** DB 작업 ****************/
@@ -330,6 +336,10 @@ export async function GET(req: NextRequest) {
     reply_count: data.reply_count,
     recast_count: data.recast_count,
     quote_count:  data.quote_count,
+    tvl:  data.tvl,
+    tvl_boost:  data.tvl_boost,
+    liquidity_boost:  data.liquidity_boost,
+    available_claim_amount:  data.available_claim_amount,
   };
 
   const profileImage = encodeURIComponent(frameData.profile_image);
@@ -354,6 +364,7 @@ export async function GET(req: NextRequest) {
                                        &farScore=${frameData.far_score}&farBoost=${frameData.far_boost}&farRank=${frameData.far_rank}
                                        &todayAmount=${frameData.today_amount}&weeklyAmount=${frameData.weekly_amount}&lifeTimeAmount=${frameData.lifetime_amount}
                                        &replyCount=${frameData.reply_count}&recastCount=${frameData.recast_count}&quoteCount=${frameData.quote_count}
+                                       &tvl=${frameData.tvl}&tvlBoost=${frameData.tvl_boost}&liquidityBoost=${frameData.liquidity_boost}&availableClaimAmount=${frameData.available_claim_amount}
                                        &cache_burst=${Math.floor(Date.now() / 1000)}`,
         aspectRatio: '1:1',
       },
