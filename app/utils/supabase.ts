@@ -32,8 +32,7 @@ export const fetchUserData = async (fid: number) => {
 export const updateInsertUserData = async (userData: any) => {
     const { fid } = userData;
 
-    console.warn("userData=" + JSON.stringify(userData));
-    console.warn("fid=" + fid);
+    console.warn("updateInsertUserData=" + JSON.stringify(userData));
   
     // 기존 데이터가 있는지 확인
     const existingEntry = await fetchUserData(fid);

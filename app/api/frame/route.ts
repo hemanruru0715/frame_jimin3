@@ -46,6 +46,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
                   tvl
                   tvlBoost
                   liquidityBoost
+                  powerBoost
                 }
                 profileDisplayName
                 profileName
@@ -112,12 +113,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     let tvl = 'N/A';
     let tvlBoost = 0;
     let liquidityBoost = 0;
+    let powerBoost = 0;
     let availableClaimAmount = 0;
 
     let todayAmount = 0;
     let weeklyAmount = 0;
     let lifeTimeAmount = 0;
     
+    let likeCount = 0;
     let replyCount = 0;
     let recastCount = 0;
     let quoteCount = 0;
@@ -130,6 +133,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       const server = "https://hubs.airstack.xyz";
       try {
         // API 요청을 병렬로 실행
+        //const [socialCapitalQueryData, castsResponse, likesResponse, reactionsResponse, quoteRecastsQueryData] = await Promise.all([
         const [socialCapitalQueryData, castsResponse, reactionsResponse, quoteRecastsQueryData] = await Promise.all([
           fetchQuery(socialCapitalQuery),
 
@@ -140,6 +144,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             },
           }),
 
+          // axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_LIKE&pageSize=600&reverse=true`, {
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //     "x-airstack-hubs": apiKey as string,
+          //   },
+          // }),
+
           axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_RECAST&pageSize=200&reverse=true`, {
             headers: {
               "Content-Type": "application/json",
@@ -149,11 +160,22 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
           fetchQuery(quoteRecastsQuery)
         ]);
-    
+
+        //5개 병렬시 오류가 자주나서 4개,1개로 병렬처리 분리
+        const [likesResponse] = await Promise.all([
+            axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_LIKE&pageSize=999&reverse=true`, {
+              headers: {
+                "Content-Type": "application/json",
+                "x-airstack-hubs": apiKey as string,
+              },
+            }),
+          ]);
+
+
         //socialCapitalQueryData
         const data = socialCapitalQueryData.data;
         
-        //console.warn("data=" + JSON.stringify(data));
+        console.warn("data=" + JSON.stringify(data));
         profileName = data.Socials.Social[0].profileName;
         profileImage = data.Socials.Social[0].profileImage;
         farScore = data.Socials.Social[0].farcasterScore.farScore.toFixed(3);
@@ -162,6 +184,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         tvl = (Number(data.Socials.Social[0].farcasterScore.tvl) / 1e18).toFixed(1); //실제 저장된 tvl목시개수는 10^18로 나눈다. 그다음 api/og로 전달. 넘겨서 다시 K표시위해 3으로 추가 나누기
         tvlBoost = data.Socials.Social[0].farcasterScore.tvlBoost.toFixed(2);
         liquidityBoost = data.Socials.Social[0].farcasterScore.liquidityBoost.toFixed(2);
+        powerBoost = data.Socials.Social[0].farcasterScore.powerBoost.toFixed(2);
         availableClaimAmount = data.FarcasterMoxieClaimDetails.FarcasterMoxieClaimDetails[0].availableClaimAmount.toFixed(2);
 
         todayAmount = data.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
@@ -171,6 +194,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         console.warn("tvl=" + (Number(tvl) / 1e18).toFixed(1));
         console.warn("tvlBoost=" + tvlBoost);
         console.warn("liquidityBoost=" + liquidityBoost);
+        console.warn("powerBoost=" + powerBoost);
         console.warn("availableClaimAmount=" + availableClaimAmount);
 
 
@@ -193,6 +217,16 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         console.warn("replyCount=" + replyCount);
     
 
+        // likesResponse에서 like 메시지 필터링
+        const filteredLikeMessages = likesResponse.data.messages.filter(
+          (message: { data: { timestamp: any } }) =>
+            message.data.timestamp > differenceInSeconds
+        );
+        //console.warn("filteredRecastMessages=" + JSON.stringify(filteredRecastMessages));
+        likeCount = filteredLikeMessages.length;
+        console.warn("likeCount=" + likeCount);
+
+
         // reactionsResponse에서 recast 메시지 필터링
         const filteredRecastMessages = reactionsResponse.data.messages.filter(
           (message: { data: { timestamp: any } }) =>
@@ -206,12 +240,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         // quoteRecastsQueryData에서 quote 메시지 필터링
         const todayStart = new Date().setUTCHours(0, 0, 0, 0);
         console.warn("todayStart=" + todayStart);
-
+        //console.warn("quoteRecastsQueryData=" + JSON.stringify(quoteRecastsQueryData));
         const filteredQuoteMessages = quoteRecastsQueryData.data.quoteRecasts.QuotedRecast.filter(
           (  item: { castedAtTimestamp: string | number | Date; }) => {
               const castedAt = new Date(item.castedAtTimestamp).getTime();
               return castedAt >= todayStart;
           });
+
 
         //console.warn("filteredQuoteMessages=" + JSON.stringify(filteredQuoteMessages));
         quoteCount = filteredQuoteMessages.length;
@@ -240,11 +275,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       weekly_amount: weeklyAmount,
       lifetime_amount: lifeTimeAmount,
       reply_count: replyCount,
+      like_count: likeCount,
       recast_count: recastCount,
       quote_count: quoteCount,
       tvl: tvl,
       tvl_boost: tvlBoost,
       liquidity_boost: liquidityBoost,
+      power_boost: powerBoost,
       available_claim_amount: availableClaimAmount,
     });
     /**************** DB 작업 끝 ****************/
@@ -267,8 +304,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           src: `${NEXT_PUBLIC_URL}/api/og?profileName=${profileName}&fid=${myFid}&profileImage=${encodedProfileImage}
                                          &farScore=${farScore}&farBoost=${farBoost}&farRank=${farRank}
                                          &todayAmount=${todayAmount}&weeklyAmount=${weeklyAmount}&lifeTimeAmount=${lifeTimeAmount}
-                                         &replyCount=${replyCount}&recastCount=${recastCount}&quoteCount=${quoteCount}
-                                         &tvl=${tvl}&tvlBoost=${tvlBoost}&liquidityBoost=${liquidityBoost}&availableClaimAmount=${availableClaimAmount}
+                                         &replyCount=${replyCount}&likeCount=${likeCount}&recastCount=${recastCount}&quoteCount=${quoteCount}
+                                         &tvl=${tvl}&tvlBoost=${tvlBoost}&liquidityBoost=${liquidityBoost}&powerBoost=${powerBoost}
+                                         &availableClaimAmount=${availableClaimAmount}
                                          &cache_burst=${Math.floor(Date.now() / 1000)}`,
           aspectRatio: '1:1',
         },
@@ -307,11 +345,13 @@ export async function GET(req: NextRequest) {
     weekly_amount: number;
     lifetime_amount: number;
     reply_count: number;
+    like_count: number;
     recast_count: number;
     quote_count: number;
     tvl: number,
     tvl_boost: number,
     liquidity_boost: number,
+    power_boost: number,
     available_claim_amount: number,
   }
 
@@ -334,11 +374,13 @@ export async function GET(req: NextRequest) {
     weekly_amount: data.weekly_amount,
     lifetime_amount: data.lifetime_amount,
     reply_count: data.reply_count,
+    like_count: data.like_count,
     recast_count: data.recast_count,
     quote_count:  data.quote_count,
     tvl:  data.tvl,
     tvl_boost:  data.tvl_boost,
     liquidity_boost:  data.liquidity_boost,
+    power_boost: data.power_boost,
     available_claim_amount:  data.available_claim_amount,
   };
 
@@ -363,8 +405,9 @@ export async function GET(req: NextRequest) {
         src: `${NEXT_PUBLIC_URL}/api/og?profileName=${frameData.profile_name}&fid=${frameData.fid}&profileImage=${profileImage}
                                        &farScore=${frameData.far_score}&farBoost=${frameData.far_boost}&farRank=${frameData.far_rank}
                                        &todayAmount=${frameData.today_amount}&weeklyAmount=${frameData.weekly_amount}&lifeTimeAmount=${frameData.lifetime_amount}
-                                       &replyCount=${frameData.reply_count}&recastCount=${frameData.recast_count}&quoteCount=${frameData.quote_count}
-                                       &tvl=${frameData.tvl}&tvlBoost=${frameData.tvl_boost}&liquidityBoost=${frameData.liquidity_boost}&availableClaimAmount=${frameData.available_claim_amount}
+                                       &replyCount=${frameData.reply_count}&likeCount=${frameData.like_count}&recastCount=${frameData.recast_count}&quoteCount=${frameData.quote_count}
+                                       &tvl=${frameData.tvl}&tvlBoost=${frameData.tvl_boost}&liquidityBoost=${frameData.liquidity_boost}&powerBoost=${frameData.power_boost}
+                                       &availableClaimAmount=${frameData.available_claim_amount}
                                        &cache_burst=${Math.floor(Date.now() / 1000)}`,
         aspectRatio: '1:1',
       },

@@ -31,25 +31,28 @@ export async function GET(req: Request) {
   const tvl = searchParams.get('tvl') ?? "";
   const tvlBoost = searchParams.get('tvlBoost') ?? "";
   const liquidityBoost = searchParams.get('liquidityBoost') ?? "";
+  const powerBoost = searchParams.get('powerBoost') ?? "";
   const availableClaimAmount = searchParams.get('availableClaimAmount') ?? "";
   //const finalTvl = parseFloat(tvl).toLocaleString();
   const finalTvlBoost = parseFloat(tvlBoost).toLocaleString();
   const finalLiquidityBoost = parseFloat(liquidityBoost).toLocaleString();
+  const finalPowerBoost = parseFloat(powerBoost).toLocaleString();
   const finalAvailableClaimAmount = parseFloat(availableClaimAmount).toLocaleString();
 
   const todayAmount = searchParams.get('todayAmount') ?? "";
-  const weeklyAmount = searchParams.get('weeklyAmount') ?? "";
-  const lifeTimeAmount = searchParams.get('lifeTimeAmount') ?? "";
+  //const weeklyAmount = searchParams.get('weeklyAmount') ?? "";
+  //const lifeTimeAmount = searchParams.get('lifeTimeAmount') ?? "";
   const finalTodayAmount = parseFloat(todayAmount).toLocaleString();
   //const finalWeeklyAmount = parseFloat(weeklyAmount).toLocaleString();
   //const finalLifeTimeAmount = parseFloat(lifeTimeAmount).toLocaleString();
 
   const replyCount = searchParams.get('replyCount') ?? "";
+  const likeCount = searchParams.get('likeCount') ?? "";
   const recastCount = searchParams.get('recastCount') ?? "";
   const quoteCount = searchParams.get('quoteCount') ?? "";
 
-  console.warn("profileName=" + profileName);
-  console.warn("fid=" + fid);
+  // console.warn("profileName=" + profileName);
+  // console.warn("fid=" + fid);
 
 
   let like  = 0;
@@ -100,6 +103,7 @@ export async function GET(req: Request) {
   //let finalLifeTimeAmountKrw = 'N/A';
 
   let finalReplyCount = 0;
+  let finalLikeCount = 0;
   let finalRcQtCount = 0;
 
   let moxieUsdPrice = 'N/A';
@@ -171,8 +175,9 @@ export async function GET(req: Request) {
     //finalWeeklyAmountKrw = weeklyAmountKrw.toLocaleString();
     //finalLifeTimeAmountKrw = lifeTimeAmountKrw.toLocaleString();
 
-    /* 댓글, 리캐 및 인용 개수 */
+    /* 댓글, 좋아요, 리캐 및 인용 개수 */
     finalReplyCount = parseFloat(replyCount);
+    finalLikeCount = parseFloat(likeCount);
     finalRcQtCount = parseFloat(recastCount) + parseFloat(quoteCount);
 
   } catch (error) {
@@ -257,7 +262,7 @@ export async function GET(req: Request) {
           <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right', fontSize: '70px' }}>
             <strong></strong>
             <div style={{ display: 'flex', flexDirection: 'row', textAlign: 'right', fontSize: '30px' }}>
-              <strong>({finalTvlBoost} FT / {finalLiquidityBoost} LP)</strong>
+              <strong>({finalTvlBoost} FT / {finalPowerBoost} PB / {finalLiquidityBoost} LP)</strong>
             </div>
           </div>
         </div>
@@ -320,7 +325,7 @@ export async function GET(req: Request) {
               }}
             />
             <strong style={{marginTop: '15px' }}>{like.toFixed(2)}</strong>
-            <strong style={{marginTop: '15px', marginLeft: '20px' }}>[ ∞ ]</strong>
+            <strong style={{marginTop: '15px', marginLeft: '20px' }}>[{finalLikeCount}/500]</strong>
           </div>
           <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px' }}>
             <strong>{finalLikeUsd} / {finalLikeKrw}</strong>
