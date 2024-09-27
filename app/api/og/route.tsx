@@ -262,7 +262,7 @@ export async function GET(req: Request) {
           <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right', fontSize: '70px' }}>
             <strong></strong>
             <div style={{ display: 'flex', flexDirection: 'row', textAlign: 'right', fontSize: '30px' }}>
-              <strong>({finalTvlBoost} FT / {finalPowerBoost} PB / {finalLiquidityBoost} LP)</strong>
+              <strong>({finalTvlBoost} FT / {finalPowerBoost} MP / {finalLiquidityBoost} LP)</strong>
             </div>
           </div>
         </div>
