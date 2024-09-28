@@ -7,6 +7,8 @@ import { NEXT_PUBLIC_URL } from '@/app/config';
 import { config } from "dotenv";
 import { fetchUserData, updateInsertUserData } from '@/app/utils/supabase';
 import axios from "axios";
+import { gql, GraphQLClient } from "graphql-request";
+import resolveFidToAddresses from "@/app/utils/resolve";
 
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 export const dynamic = 'force-dynamic';
@@ -104,6 +106,34 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         }
       `;
 
+      /* 팬토큰 TVL 스테이킹,언스테이킹 */
+      const graphQLClient = new GraphQLClient(
+        "https://api.studio.thegraph.com/query/23537/moxie_protocol_stats_mainnet/version/latest"
+      );
+
+      const query = gql`
+        query MyQuery($userAddresses: [ID!]) {
+          users(where: { id_in: $userAddresses }) {
+            portfolio {
+              stakedBalance
+              unstakedBalance
+              buyVolume
+              sellVolume
+              subjectToken {
+                currentPriceInMoxie
+                name
+                symbol
+              }
+            }
+          }
+        }
+      `;
+
+      const variable = {
+        // You can remove await if you are using `moxie_resolve.json`
+        userAddresses: await resolveFidToAddresses(myFid),
+      };
+
 
     let profileName = '';
     let profileImage = '';
@@ -115,6 +145,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     let liquidityBoost = 0;
     let powerBoost = 0;
     let availableClaimAmount = 0;
+
+    let stakedTvl = 0;
+    let unStakedTvl = 0;
 
     let todayAmount = 0;
     let weeklyAmount = 0;
@@ -133,7 +166,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       const server = "https://hubs.airstack.xyz";
       try {
         // API 요청을 병렬로 실행
-        //const [socialCapitalQueryData, castsResponse, likesResponse, reactionsResponse, quoteRecastsQueryData] = await Promise.all([
         const [socialCapitalQueryData, castsResponse, reactionsResponse, quoteRecastsQueryData] = await Promise.all([
           fetchQuery(socialCapitalQuery),
 
@@ -143,13 +175,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
               "x-airstack-hubs": apiKey as string,
             },
           }),
-
-          // axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_LIKE&pageSize=600&reverse=true`, {
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //     "x-airstack-hubs": apiKey as string,
-          //   },
-          // }),
 
           axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_RECAST&pageSize=200&reverse=true`, {
             headers: {
@@ -162,13 +187,15 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         ]);
 
         //5개 병렬시 오류가 자주나서 4개,1개로 병렬처리 분리
-        const [likesResponse] = await Promise.all([
+        const [likesResponse, stakingData] = await Promise.all([
             axios.get(`${server}/v1/reactionsByFid?fid=`+ myFid +`&reaction_type=REACTION_TYPE_LIKE&pageSize=999&reverse=true`, {
               headers: {
                 "Content-Type": "application/json",
                 "x-airstack-hubs": apiKey as string,
               },
             }),
+
+            graphQLClient.request(query, variable)
           ]);
 
 
@@ -190,6 +217,57 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         todayAmount = data.today.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
         weeklyAmount = data.weekly.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
         lifeTimeAmount = data.allTime.FarcasterMoxieEarningStat[0].allEarningsAmount.toFixed(2);
+
+
+        console.warn("stakingData=" + JSON.stringify(stakingData));
+
+        type Token = {
+          stakedBalance: string;
+          unstakedBalance: string;
+          buyVolume: string;
+          sellVolume: string;
+          subjectToken: {
+            currentPriceInMoxie: string;
+            name: string;
+            symbol: string;
+          };
+        };
+        
+        type User = {
+          portfolio: Token[];
+        };
+        
+        type stakingData = {
+          users: User[];
+        };
+
+        const totalStakedBalance = (stakingData as stakingData).users.reduce((total, user) => {
+          const userTotal  = user.portfolio.reduce((sum, token) => {
+
+              let stakedBalance = Number(token.stakedBalance)/1e18;
+              let unstakedBalance = Number(token.unstakedBalance)/1e18;
+              let currentPriceInMoxie = Number(Number(token.subjectToken.currentPriceInMoxie).toFixed(2));
+
+              let stakedTvl = stakedBalance * currentPriceInMoxie;
+              let unStakedTvl = unstakedBalance * currentPriceInMoxie;
+
+              return {
+                staked: sum.staked + stakedTvl,
+                unStaked: sum.unStaked + unStakedTvl,
+              };
+          }, { staked: 0, unStaked: 0 });
+          
+          return {
+            staked: total.staked + userTotal.staked,
+            unStaked: total.unStaked + userTotal.unStaked,
+          };
+        }, { staked: 0, unStaked: 0 });
+
+        stakedTvl = totalStakedBalance.staked;
+        unStakedTvl = totalStakedBalance.unStaked;
+
+        console.warn("stakedTvl=" + stakedTvl);
+        console.warn("unStakedTvl=" + unStakedTvl);
 
         console.warn("tvl=" + (Number(tvl) / 1e18).toFixed(1));
         console.warn("tvlBoost=" + tvlBoost);
@@ -283,6 +361,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       liquidity_boost: liquidityBoost,
       power_boost: powerBoost,
       available_claim_amount: availableClaimAmount,
+      staked_tvl: stakedTvl,
+      unstaked_tvl: unStakedTvl,
     });
     /**************** DB 작업 끝 ****************/
 
@@ -306,6 +386,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
                                          &todayAmount=${todayAmount}&weeklyAmount=${weeklyAmount}&lifeTimeAmount=${lifeTimeAmount}
                                          &replyCount=${replyCount}&likeCount=${likeCount}&recastCount=${recastCount}&quoteCount=${quoteCount}
                                          &tvl=${tvl}&tvlBoost=${tvlBoost}&liquidityBoost=${liquidityBoost}&powerBoost=${powerBoost}
+                                         &stakedTvl=${stakedTvl}&unStakedTvl=${unStakedTvl}
                                          &availableClaimAmount=${availableClaimAmount}
                                          &cache_burst=${Math.floor(Date.now() / 1000)}`,
           aspectRatio: '1:1',
@@ -353,6 +434,8 @@ export async function GET(req: NextRequest) {
     liquidity_boost: number,
     power_boost: number,
     available_claim_amount: number,
+    staked_tvl: number,
+    unstaked_tvl: number,
   }
 
   /**************** DB 작업 ****************/
@@ -382,6 +465,8 @@ export async function GET(req: NextRequest) {
     liquidity_boost:  data.liquidity_boost,
     power_boost: data.power_boost,
     available_claim_amount:  data.available_claim_amount,
+    staked_tvl: data.staked_tvl,
+    unstaked_tvl: data.unstaked_tvl,
   };
 
   const profileImage = encodeURIComponent(frameData.profile_image);
@@ -407,6 +492,7 @@ export async function GET(req: NextRequest) {
                                        &todayAmount=${frameData.today_amount}&weeklyAmount=${frameData.weekly_amount}&lifeTimeAmount=${frameData.lifetime_amount}
                                        &replyCount=${frameData.reply_count}&likeCount=${frameData.like_count}&recastCount=${frameData.recast_count}&quoteCount=${frameData.quote_count}
                                        &tvl=${frameData.tvl}&tvlBoost=${frameData.tvl_boost}&liquidityBoost=${frameData.liquidity_boost}&powerBoost=${frameData.power_boost}
+                                       &stakedTvl=${frameData.staked_tvl}&unStakedTvl=${frameData.unstaked_tvl}
                                        &availableClaimAmount=${frameData.available_claim_amount}
                                        &cache_burst=${Math.floor(Date.now() / 1000)}`,
         aspectRatio: '1:1',

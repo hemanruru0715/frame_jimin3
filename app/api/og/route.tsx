@@ -39,12 +39,13 @@ export async function GET(req: Request) {
   const finalPowerBoost = parseFloat(powerBoost).toLocaleString();
   const finalAvailableClaimAmount = parseFloat(availableClaimAmount).toLocaleString();
 
+  const stakedTvl = searchParams.get('stakedTvl') ?? "";
+  //const finalStakedTvl = parseFloat(stakedTvl).toLocaleString();
+  const unStakedTvl = searchParams.get('unStakedTvl') ?? "";
+  //const finalUnStakedTvl = parseFloat(unStakedTvl).toLocaleString();
+
   const todayAmount = searchParams.get('todayAmount') ?? "";
-  //const weeklyAmount = searchParams.get('weeklyAmount') ?? "";
-  //const lifeTimeAmount = searchParams.get('lifeTimeAmount') ?? "";
   const finalTodayAmount = parseFloat(todayAmount).toLocaleString();
-  //const finalWeeklyAmount = parseFloat(weeklyAmount).toLocaleString();
-  //const finalLifeTimeAmount = parseFloat(lifeTimeAmount).toLocaleString();
 
   const replyCount = searchParams.get('replyCount') ?? "";
   const likeCount = searchParams.get('likeCount') ?? "";
@@ -87,20 +88,25 @@ export async function GET(req: Request) {
   let finalTvlKrw = 'N/A';
   let finalAvailableClaimAmountKrw = 'N/A';
   
+  let finalStakedTvl = 'N/A'
+  let finalUnStakedTvl = 'N/A'
+
+  let stakedTvlUsd = 0;
+  let unStakedTvlUsd = 0;
+  let finalStakedTvlUsd = 'N/A';
+  let finalUnStakedTvlUsd = 'N/A';
+
+  let stakedTvlKrw = 0;
+  let unStakedTvlKrw = 0;
+  let finalStakedTvlKrw = 'N/A';
+  let finalUnStakedTvlKrw = 'N/A';
+
 
   let todayAmountUsd    = 0;
-  //let weeklyAmountUsd   = 0;
-  //let lifeTimeAmountUsd = 0;
   let finalTodayAmountUsd    = 'N/A';
-  //let finalWeeklyAmountUsd   = 'N/A';
-  //let finalLifeTimeAmountUsd = 'N/A';
 
   let todayAmountKrw    = 0;
-  //let weeklyAmountKrw   = 0;
-  //let lifeTimeAmountKrw = 0;
   let finalTodayAmountKrw    = 'N/A';
-  //let finalWeeklyAmountKrw   = 'N/A';
-  //let finalLifeTimeAmountKrw = 'N/A';
 
   let finalReplyCount = 0;
   let finalLikeCount = 0;
@@ -146,34 +152,43 @@ export async function GET(req: Request) {
     finalRcQtKrw = rcQtKrw.toLocaleString();
 
     /* tvl 관련 USD */
-    tvlUsd    = parseFloat((parseFloat(tvl) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
-    availableClaimAmountUsd    = parseFloat((parseFloat(availableClaimAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
+    tvlUsd    = parseFloat((parseFloat(tvl) * parseFloat(moxieUsdPrice)).toFixed(2));
+    availableClaimAmountUsd    = parseFloat((parseFloat(availableClaimAmount) * parseFloat(moxieUsdPrice)).toFixed(2));
     finalTvlUsd = tvlUsd.toLocaleString();
     finalAvailableClaimAmountUsd = availableClaimAmountUsd.toLocaleString();
 
     /* tvl 관련 KRW */
-    tvlKrw    = parseFloat((parseFloat(tvl) * parseFloat(moxieKrwPrice)).toFixed(0).toLocaleString());
-    availableClaimAmountKrw    = parseFloat((parseFloat(availableClaimAmount) * parseFloat(moxieKrwPrice)).toFixed(0).toLocaleString());
+    tvlKrw    = parseFloat((parseFloat(tvl) * parseFloat(moxieKrwPrice)).toFixed(0));
+    availableClaimAmountKrw    = parseFloat((parseFloat(availableClaimAmount) * parseFloat(moxieKrwPrice)).toFixed(0));
     finalTvlKrw = tvlKrw.toLocaleString();
     finalAvailableClaimAmountKrw = availableClaimAmountKrw.toLocaleString();
 
     finalTvl = (Number(tvl) / 1e3).toFixed(1);
 
+
+
+    /* stakedTvl, unStakedTvl 관련 USD */
+    stakedTvlUsd    = parseFloat((parseFloat(stakedTvl) * parseFloat(moxieUsdPrice)).toFixed(2));
+    unStakedTvlUsd    = parseFloat((parseFloat(unStakedTvl) * parseFloat(moxieUsdPrice)).toFixed(2));
+    finalStakedTvlUsd = stakedTvlUsd.toLocaleString();
+    finalUnStakedTvlUsd = unStakedTvlUsd.toLocaleString();
+
+    /* stakedTvl, unStakedTvl 관련 KRW */
+    stakedTvlKrw    = parseFloat((parseFloat(stakedTvl) * parseFloat(moxieKrwPrice)).toFixed(0));
+    unStakedTvlKrw    = parseFloat((parseFloat(unStakedTvl) * parseFloat(moxieKrwPrice)).toFixed(0));
+    finalStakedTvlKrw = stakedTvlKrw.toLocaleString();
+    finalUnStakedTvlKrw = unStakedTvlKrw.toLocaleString();
+    
+    finalStakedTvl = (Number(stakedTvl) / 1e3).toFixed(1).toLocaleString();
+    finalUnStakedTvl = (Number(unStakedTvl) / 1e3).toFixed(1).toLocaleString();
+
     /* today,weekly,lifeTime 관련 USD */
     todayAmountUsd    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
-    //weeklyAmountUsd   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
-    //lifeTimeAmountUsd = parseFloat((parseFloat(lifeTimeAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
     finalTodayAmountUsd = todayAmountUsd.toLocaleString();
-    //finalWeeklyAmountUsd = weeklyAmountUsd.toLocaleString();
-    //finalLifeTimeAmountUsd = lifeTimeAmountUsd.toLocaleString();
-
+    
     /* today,weekly,lifeTime 관련 KRW */
     todayAmountKrw    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieKrwPrice)).toFixed(0).toLocaleString());
-    //weeklyAmountKrw   = parseFloat((parseFloat(weeklyAmount) * parseFloat(moxieKrwPrice)).toFixed(0).toLocaleString());
-    //lifeTimeAmountKrw = parseFloat((parseFloat(lifeTimeAmount) * parseFloat(moxieKrwPrice)).toFixed(0).toLocaleString());
     finalTodayAmountKrw = todayAmountKrw.toLocaleString();
-    //finalWeeklyAmountKrw = weeklyAmountKrw.toLocaleString();
-    //finalLifeTimeAmountKrw = lifeTimeAmountKrw.toLocaleString();
 
     /* 댓글, 좋아요, 리캐 및 인용 개수 */
     finalReplyCount = parseFloat(replyCount);
@@ -207,7 +222,7 @@ export async function GET(req: Request) {
       >
 
 
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '80px', marginBottom: '50px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '80px', marginBottom: '35px' }}>
           <div style={{ display: 'flex', textAlign: 'left' }}>
           <img
             src={profileImage}
@@ -219,7 +234,7 @@ export async function GET(req: Request) {
               marginRight: '20px',
             }}
           />
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: '30px', color: 'black', marginTop: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '30px', color: 'black', marginTop: '20px' }}>
             <div style={{ display: 'flex', marginRight: '20px' }}>@{profileName}</div>
             <div style={{ display: 'flex', marginRight: '40px' }}>FID:{fid}</div>
           </div>
@@ -227,8 +242,8 @@ export async function GET(req: Request) {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <strong></strong>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems:'flex-end', fontSize: '40px' }}>
-              <strong style={{ marginLeft: '150px', fontSize: '30px' }}>Moxie Price</strong>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems:'flex-end', fontSize: '30px' }}>
+              <strong style={{ marginLeft: '150px', fontSize: '25px' }}>Moxie Price</strong>
               <strong style={{ marginLeft: '150px' }}>{moxieUsdPrice} USD</strong>
               <strong style={{ marginLeft: '150px' }}>{moxieKrwPrice} KRW</strong>
             </div>
@@ -237,7 +252,7 @@ export async function GET(req: Request) {
 
 
         {/* 행 단위로 구성된 섹션들 */}
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '40px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '25px' }}>
           <div style={{ display: 'flex', textAlign: 'left' }}>
             <strong>FarRank</strong>
           </div>
@@ -267,7 +282,7 @@ export async function GET(req: Request) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '50px', marginBottom: '50px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '50px', marginBottom: '35px' }}>
           <div style={{ display: 'flex', textAlign: 'left' }}>
             <strong></strong>
           </div>
@@ -276,7 +291,7 @@ export async function GET(req: Request) {
           </div>
         </div>
         
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '30px', marginBottom: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '25px', marginBottom: '10px' }}>
           <div style={{ display: 'flex', textAlign: 'left' }}>
             <strong></strong>
           </div>
@@ -295,11 +310,20 @@ export async function GET(req: Request) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '45px', marginBottom: '25px' }}>
-          <div style={{ display: 'flex', textAlign: 'left' }}>
-            <strong>TVL {finalTvl}K</strong>
+          <div style={{ display: 'flex', textAlign: 'left', fontSize: '40px' }}>
+            <strong>Locked {finalStakedTvl}K</strong>
           </div>
-          <div style={{ display: 'flex', textAlign: 'right', fontSize: '40px' }}>
-            <strong>{finalTvlUsd} / {finalTvlKrw}</strong>
+          <div style={{ display: 'flex', textAlign: 'right' }}>
+            <strong>{finalStakedTvlUsd} / {finalStakedTvlKrw}</strong>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', fontSize: '45px', marginBottom: '25px' }}>
+          <div style={{ display: 'flex', textAlign: 'left', fontSize: '40px' }}>
+            <strong>UnLocked {finalUnStakedTvl}K</strong>
+          </div>
+          <div style={{ display: 'flex', textAlign: 'right' }}>
+            <strong>{finalUnStakedTvlUsd} / {finalUnStakedTvlKrw}</strong>
           </div>
         </div>
 
