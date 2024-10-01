@@ -26,7 +26,7 @@ export async function fetchCoinData() {
   
     // const dataMoxieKrw = await responseMoxieKrw.json();
   
-    //console.warn("###dataMoxieUsd=" + JSON.stringify(dataMoxieUsd));
+    console.warn("###dataMoxieUsd=" + JSON.stringify(dataMoxieUsd));
     // console.warn("###dataMoxieKrw=" + JSON.stringify(dataMoxieKrw));
   
     const moxieUsdPrice = dataMoxieUsd.data.MOXIE[0].quote.USD.price.toFixed(6);  // USD 가격
