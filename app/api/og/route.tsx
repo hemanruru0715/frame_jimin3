@@ -179,8 +179,8 @@ export async function GET(req: Request) {
     finalStakedTvlKrw = stakedTvlKrw.toLocaleString();
     finalUnStakedTvlKrw = unStakedTvlKrw.toLocaleString();
     
-    finalStakedTvl = (Number(stakedTvl) / 1e3).toFixed(1).toLocaleString();
-    finalUnStakedTvl = (Number(unStakedTvl) / 1e3).toFixed(1).toLocaleString();
+    finalStakedTvl = Number((Number(stakedTvl) / 1e3).toFixed(1)).toLocaleString();
+    finalUnStakedTvl = Number((Number(unStakedTvl) / 1e3).toFixed(1)).toLocaleString();
 
     /* today,weekly,lifeTime 관련 USD */
     todayAmountUsd    = parseFloat((parseFloat(todayAmount) * parseFloat(moxieUsdPrice)).toFixed(2).toLocaleString());
