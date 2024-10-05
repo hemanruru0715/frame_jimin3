@@ -5,7 +5,7 @@ import { getFarcasterUserDetails, FarcasterUserDetailsInput, FarcasterUserDetail
 import { fetchQuery } from "@airstack/node";
 import { NEXT_PUBLIC_URL } from '@/app/config';
 import { config } from "dotenv";
-import { fetchUserData, updateInsertUserData } from '@/app/utils/supabase';
+import { fetchUserData, updateInsertUserData, updateInsertUserDataForChart } from '@/app/utils/supabase';
 import axios from "axios";
 import { gql, GraphQLClient } from "graphql-request";
 import resolveFidToAddresses from "@/app/utils/resolve";
@@ -202,7 +202,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         //socialCapitalQueryData
         const data = socialCapitalQueryData.data;
         
-        console.warn("data=" + JSON.stringify(data));
+        //console.warn("data=" + JSON.stringify(data));
         profileName = data.Socials.Social[0].profileName;
         profileImage = data.Socials.Social[0].profileImage;
         farScore = data.Socials.Social[0].farcasterScore.farScore.toFixed(3);
@@ -363,6 +363,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       available_claim_amount: availableClaimAmount,
       staked_tvl: stakedTvl,
       unstaked_tvl: unStakedTvl,
+    });
+
+
+    await updateInsertUserDataForChart({
+      fid: myFid,
+      far_rank: farRank,
+      available_claim_amount: availableClaimAmount,
     });
     /**************** DB 작업 끝 ****************/
 
