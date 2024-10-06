@@ -162,7 +162,12 @@ function getKoreanISOString() {
 }
 
 const getUTCYYYYMMDD = (date: Date): string => {
-  const UTCTime = new Date(date.getTime() - 9 * 60 * 60 * 1000); // 9시간(밀리초 단위) 빼기
+  // 현재 환경이 Vercel 서버(UTC)인지 로컬(KST)인지 확인
+  const isServerUTC = date.getTimezoneOffset() === 0;
+  console.log("isServerUTC=" + isServerUTC);
+
+  // 로컬(KST) 환경에서는 9시간을 빼고, 서버(UTC) 환경에서는 그대로 둠
+  const UTCTime = isServerUTC ? date : new Date(date.getTime() - 9 * 60 * 60 * 1000);
   console.log("UTCTime=" + UTCTime);
 
   const year = UTCTime.getFullYear();
