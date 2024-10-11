@@ -125,8 +125,8 @@ export async function GET(req: Request) {
 
     //화면 구성값 계산
     like  = parseFloat(farScore) * 0.5;
-    reply = parseFloat((parseFloat(farScore) * 2).toFixed(3));
-    rcQt  = parseFloat((parseFloat(farScore) * 4).toFixed(3));
+    reply = parseFloat((parseFloat(farScore) * 1).toFixed(3));
+    rcQt  = parseFloat((parseFloat(farScore) * 2).toFixed(3));
     finalLike  = like.toLocaleString();
     finalReply = reply.toLocaleString();
     finalRcQt  = rcQt.toLocaleString();
@@ -369,7 +369,7 @@ export async function GET(req: Request) {
               }}
             />
             <strong style={{marginTop: '20px' }}>{reply.toFixed(2)}</strong>
-            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[{finalReplyCount}/300]</strong>
+            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[{finalReplyCount}/200]</strong>
           </div>
           <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px', marginTop:'10px' }}>
             <strong>{finalReplyUsd} / {finalReplyKrw}</strong>
@@ -389,7 +389,7 @@ export async function GET(req: Request) {
               }}
             />
             <strong style={{marginTop: '20px' }}>{rcQt.toFixed(2)}</strong>
-            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[{finalRcQtCount}/150]</strong>
+            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[{finalRcQtCount}/100]</strong>
           </div>
           <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px', marginTop:'10px' }}>
             <strong>{finalRcQtUsd} / {finalRcQtKrw}</strong>
