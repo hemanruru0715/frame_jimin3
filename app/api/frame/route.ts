@@ -384,7 +384,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           },
           { 
             action: 'link', 
-            label: 'Share', 
+            label: '🔄Share', 
             target: `https://warpcast.com/~/compose?text=Check your Moxie Stats. Frame created by @hemanruru&embeds%5B%5D=${encodeURIComponent(frameUrl)}`
           },
         ],
@@ -490,7 +490,7 @@ export async function GET(req: NextRequest) {
         },
         { 
           action: 'link', 
-          label: 'Share', 
+          label: '🔄Share', 
           target: `https://warpcast.com/~/compose?text=Check your Moxie Stats. Frame created by @hemanruru&embeds%5B%5D=${encodeURIComponent(frameUrl)}`
         },
       ],
