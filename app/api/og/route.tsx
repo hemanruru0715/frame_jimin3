@@ -52,6 +52,13 @@ export async function GET(req: Request) {
   const recastCount = searchParams.get('recastCount') ?? "";
   const quoteCount = searchParams.get('quoteCount') ?? "";
 
+  const allowLike = searchParams.get('allowLike') ?? "";
+  const allowReply = searchParams.get('allowReply') ?? "";
+  const allowRcQt = (searchParams.get('allowRcQt') ?? "").replace(/\s+/g, '');
+
+  console.log("@@@allowLike=" + allowLike);
+  console.log("@@@allowReply=" + allowReply);
+  console.log("@@@allowRcQt=" + allowRcQt);
   // console.warn("profileName=" + profileName);
   // console.warn("fid=" + fid);
 
@@ -349,7 +356,7 @@ export async function GET(req: Request) {
               }}
             />
             <strong style={{marginTop: '15px' }}>{like.toFixed(2)}</strong>
-            <strong style={{marginTop: '15px', marginLeft: '20px' }}>[{finalLikeCount}/500]</strong>
+            <strong style={{marginTop: '15px', marginLeft: '20px' }}>[{finalLikeCount}/{allowLike}]</strong>
           </div>
           <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px' }}>
             <strong>{finalLikeUsd} / {finalLikeKrw}</strong>
@@ -369,7 +376,7 @@ export async function GET(req: Request) {
               }}
             />
             <strong style={{marginTop: '20px' }}>{reply.toFixed(2)}</strong>
-            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[{finalReplyCount}/200]</strong>
+            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[{finalReplyCount}/{allowReply}]</strong>
           </div>
           <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px', marginTop:'10px' }}>
             <strong>{finalReplyUsd} / {finalReplyKrw}</strong>
@@ -389,7 +396,7 @@ export async function GET(req: Request) {
               }}
             />
             <strong style={{marginTop: '20px' }}>{rcQt.toFixed(2)}</strong>
-            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[{finalRcQtCount}/100]</strong>
+            <strong style={{marginTop: '20px', marginLeft: '20px' }}>[{finalRcQtCount}/{allowRcQt}]</strong>
           </div>
           <div style={{ display: 'flex', textAlign: 'right', fontSize: '60px', marginTop:'10px' }}>
             <strong>{finalRcQtUsd} / {finalRcQtKrw}</strong>
