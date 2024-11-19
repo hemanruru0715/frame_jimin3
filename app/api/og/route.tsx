@@ -206,6 +206,10 @@ export async function GET(req: Request) {
     console.error('Error fetching MOXIE price:', error);
   }
 
+  /* fid별 맞춤형 커스텀 */
+  const customBackgroundImage = (fid == '425967') ? `url(${NEXT_PUBLIC_URL}/cubjs1.jpg)` : `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
+  const customColor = (fid == '425967') ? '#FFFFFF' : '#007D34'; 
+
   if (searchParams != null) {
     return new ImageResponse(
       (
@@ -220,11 +224,11 @@ export async function GET(req: Request) {
           //fontFamily: '"Arial", sans-serif',
           fontFamily: '"Poppins-Regular"', // 폰트 이름
           //backgroundColor: '#7158e2',
-          color: '#FFFFFF',
+          color: customColor,
           padding: '40px',
           boxSizing: 'border-box',
           //backgroundImage: 'linear-gradient(145deg, #6d5dfc 10%, #b2a3f6 90%)',
-          backgroundImage: `url(${NEXT_PUBLIC_URL}/autumn.png)`,
+          backgroundImage: customBackgroundImage,
         }}
       >
 
@@ -241,7 +245,7 @@ export async function GET(req: Request) {
               marginRight: '20px',
             }}
           />
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '30px', color: 'black', marginTop: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', fontSize: '30px', color: customColor, marginTop: '20px' }}>
             <div style={{ display: 'flex', marginRight: '20px' }}>@{profileName}</div>
             <div style={{ display: 'flex', marginRight: '40px' }}>FID:{fid}</div>
           </div>
@@ -413,7 +417,7 @@ export async function GET(req: Request) {
             justifyContent: 'space-between',
             padding: '0 20px', // Padding for left and right alignment
             fontSize: '24px', // Adjust font size as needed
-            color: 'black',
+            color: customColor,
             fontFamily: '"Poppins-Regular"', // 폰트 이름
           }}
         >
