@@ -13,7 +13,6 @@ import { google } from 'googleapis';
 
 //process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 export const dynamic = 'force-dynamic';
-
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   try {
 
@@ -28,8 +27,18 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     if (!isValid) {
       return new NextResponse('Message not valid', { status: 500 });
     }
+
+    //console.log("!!!!!!!!!!!!!message=" + JSON.stringify(message));
     let myFid = Number(message?.data?.fid) || 0;
-    const input: FarcasterUserDetailsInput = { fid: myFid };
+    //const input: FarcasterUserDetailsInput = { fid: myFid };
+
+    // inputText 값을 가져오기
+    const inputText = message?.data?.frameActionBody.inputText ?? "";
+    // UTF-8 디코딩
+    const textDecoder = new TextDecoder("utf-8");
+    let customText = textDecoder.decode(new Uint8Array(Object.values(inputText)));
+    console.log("customText=" + customText);
+
 
     //파캐스터 유저정보
     //const { data, error }: FarcasterUserDetailsOutput = await getFarcasterUserDetails(input);
@@ -406,6 +415,7 @@ console.log("allowRcQt=" + allowRcQt);
       allow_like: allowLike,
       allow_reply: allowReply,
       allow_rcqt: allowRcQt,
+      custom_text: customText,
     });
 
 
@@ -417,10 +427,13 @@ console.log("allowRcQt=" + allowRcQt);
     });
     /**************** DB 작업 끝 ****************/
 
-    const frameUrl = `${NEXT_PUBLIC_URL}/api/frame?fid=${myFid}&cache_burst=${Math.floor(Date.now() / 1000)}`;
+    const frameUrl = `${NEXT_PUBLIC_URL}/api/frame?fid=${myFid}&cache_burst=${Math.floor(Date.now() / 1000)}`;     
 
     return new NextResponse(
       getFrameHtmlResponse({
+        input: {
+          text: "Secret Code"
+        },
         buttons: [
           { 
             label: 'MyStats/🔎' 
@@ -439,7 +452,7 @@ console.log("allowRcQt=" + allowRcQt);
                                          &tvl=${tvl}&tvlBoost=${tvlBoost}&liquidityBoost=${liquidityBoost}&powerBoost=${powerBoost}
                                          &stakedTvl=${stakedTvl}&unStakedTvl=${unStakedTvl}
                                          &availableClaimAmount=${availableClaimAmount}&allowLike=${allowLike}&allowReply=${allowReply}&allowRcQt=${allowRcQt}
-                                         &cache_burst=${Math.floor(Date.now() / 1000)}`,
+                                         &customText=${customText}&cache_burst=${Math.floor(Date.now() / 1000)}`,
           aspectRatio: '1:1',
         },
         postUrl: `${NEXT_PUBLIC_URL}/api/frame?cache_burst=${Math.floor(Date.now() / 1000)}`,
@@ -490,6 +503,7 @@ export async function GET(req: NextRequest) {
     allow_like: number,
     allow_reply: number,
     allow_rcqt: number,
+    custom_text: string,
   }
 
   /**************** DB 작업 ****************/
@@ -524,6 +538,7 @@ export async function GET(req: NextRequest) {
     allow_like: data.allow_like,
     allow_reply: data.allow_reply,
     allow_rcqt: data.allow_rcqt,
+    custom_text: data.custom_text,
   };
 
   const profileImage = encodeURIComponent(frameData.profile_image);
@@ -533,6 +548,9 @@ export async function GET(req: NextRequest) {
 
   return new NextResponse(
     getFrameHtmlResponse({
+      input: {
+        text: "Secret Code"
+      },
       buttons: [
         { 
           label: 'MyStats/🔎' 
@@ -552,7 +570,7 @@ export async function GET(req: NextRequest) {
                                        &stakedTvl=${frameData.staked_tvl}&unStakedTvl=${frameData.unstaked_tvl}
                                        &availableClaimAmount=${frameData.available_claim_amount}
                                        &allowLike=${frameData.allow_like}&allowReply=${frameData.allow_reply}&allowRcQt=${frameData.allow_rcqt}
-                                       &cache_burst=${Math.floor(Date.now() / 1000)}`,
+                                       &customText=${frameData.custom_text}&cache_burst=${Math.floor(Date.now() / 1000)}`,
         aspectRatio: '1:1',
       },
       postUrl: `${NEXT_PUBLIC_URL}/api/frame?cache_burst=${Math.floor(Date.now() / 1000)}`,

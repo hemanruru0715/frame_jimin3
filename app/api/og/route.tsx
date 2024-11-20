@@ -56,6 +56,9 @@ export async function GET(req: Request) {
   const allowReply = searchParams.get('allowReply') ?? "";
   const allowRcQt = (searchParams.get('allowRcQt') ?? "").replace(/\s+/g, '');
 
+  const customText = searchParams.get('customText') ?? "";
+  console.log("@@@customText=" + customText);
+
   console.log("@@@allowLike=" + allowLike);
   console.log("@@@allowReply=" + allowReply);
   console.log("@@@allowRcQt=" + allowRcQt);
@@ -207,8 +210,35 @@ export async function GET(req: Request) {
   }
 
   /* fid별 맞춤형 커스텀 */
-  const customBackgroundImage = (fid == '425967') ? `url(${NEXT_PUBLIC_URL}/cubjs1.jpg)` : `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
-  const customColor = (fid == '425967') ? '#FFFFFF' : '#007D34'; 
+  let customBackgroundImage = '';
+  let customColor = '';
+  if(fid == '425967'){
+    if(customText == "king1"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/cubjs1.jpg)`; 
+      customColor = '#FFFFFF'; 
+    }
+    else if(customText == "king2"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/cubjs2.jpg)`; 
+      customColor = '#FFFFFF'; 
+    }
+    else if(customText == "king3"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/cubjs3.jpg)`; 
+      customColor = '#FFFFFF'; 
+    }
+    else if(customText == "king4"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/cubjs4.jpg)`; 
+      customColor = '#FFFFFF'; 
+    }
+    else{
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
+      customColor = '#007D34'; 
+    }
+  }
+  else{
+    customBackgroundImage = `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
+    customColor = '#007D34'; 
+  }
+
 
   if (searchParams != null) {
     return new ImageResponse(
