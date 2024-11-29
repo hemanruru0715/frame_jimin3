@@ -234,6 +234,24 @@ export async function GET(req: Request) {
       customColor = '#007D34'; 
     }
   }
+  else   if(fid == '491420'){
+    if(customText == "r"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/red.jpg)`; 
+      customColor = '#2600FF'; 
+    }
+    else if(customText == "b"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/black.jpg)`; 
+      customColor = '#FFFFFF'; 
+    }
+    else if(customText == "w"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/white.jpg)`; 
+      customColor = '#007D34'; 
+    }
+    else{
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
+      customColor = '#007D34'; 
+    }
+  }
   else{
     customBackgroundImage = `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
     customColor = '#007D34'; 
