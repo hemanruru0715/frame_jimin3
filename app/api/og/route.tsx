@@ -234,7 +234,7 @@ export async function GET(req: Request) {
       customColor = '#007D34'; 
     }
   }
-  else   if(fid == '491420'){
+  else   if(fid == '418752'){
     if(customText == "r"){
       customBackgroundImage = `url(${NEXT_PUBLIC_URL}/red.jpg)`; 
       customColor = '#2600FF'; 
