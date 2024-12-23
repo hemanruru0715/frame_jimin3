@@ -253,8 +253,16 @@ export async function GET(req: Request) {
     }
   }
   else{
-    customBackgroundImage = `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
-    customColor = '#007D34'; 
+
+    if(customText == "1225"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/christmas.jpg)`; 
+      customColor = '#F0F200'; 
+    }
+    else{
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
+      customColor = '#007D34'; 
+    }
+    
   }
 
 
