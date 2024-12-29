@@ -258,6 +258,14 @@ export async function GET(req: Request) {
       customBackgroundImage = `url(${NEXT_PUBLIC_URL}/christmas.jpg)`; 
       customColor = '#F0F200'; 
     }
+    else if(customText == "2025"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/newyear.jpg)`; 
+      customColor = '#2000F7'; 
+    }
+    else if(customText == "0101"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/newyear2.jpg)`; 
+      customColor = '#4D013F'; 
+    }
     else{
       customBackgroundImage = `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
       customColor = '#007D34'; 
