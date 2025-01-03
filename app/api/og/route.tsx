@@ -234,7 +234,7 @@ export async function GET(req: Request) {
       customColor = '#007D34'; 
     }
   }
-  else   if(fid == '418752'){
+  else if(fid == '418752'){
     if(customText == "r"){
       customBackgroundImage = `url(${NEXT_PUBLIC_URL}/red.jpg)`; 
       customColor = '#2600FF'; 
@@ -246,6 +246,18 @@ export async function GET(req: Request) {
     else if(customText == "w"){
       customBackgroundImage = `url(${NEXT_PUBLIC_URL}/white.jpg)`; 
       customColor = '#007D34'; 
+    }
+    else if(customText == "1225"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/christmas.jpg)`; 
+      customColor = '#F0F200'; 
+    }
+    else if(customText == "2025"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/newyear.jpg)`; 
+      customColor = '#2000F7'; 
+    }
+    else if(customText == "0101"){
+      customBackgroundImage = `url(${NEXT_PUBLIC_URL}/newyear2.jpg)`; 
+      customColor = '#4D013F'; 
     }
     else{
       customBackgroundImage = `url(${NEXT_PUBLIC_URL}/winterdays_jimin3.png)`; 
